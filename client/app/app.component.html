@@ -8,12 +8,17 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
           <a routerLink="/" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-            <i class="fa fa-home"></i> Home
+            <i class="fa fa-home"></i> About
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/cats" class="nav-link" routerLinkActive="active">
-            <i class="fa fa-list"></i> Cats
+          <a routerLink="/jobs" class="nav-link" routerLinkActive="active">
+            <i class="fa fa-list"></i> Work History
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/projects" class="nav-link" routerLinkActive="active">
+            <i class="fa fa-list"></i> Projects
           </a>
         </li>
         <li class="nav-item">
@@ -36,15 +41,19 @@
             <i class="fa fa-lock"></i> Admin
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" id="lastItem">
           <a routerLink="/logout" class="nav-link" routerLinkActive="active" *ngIf="auth.loggedIn">
             <i class="fa fa-sign-out"></i> Logout
           </a>
         </li>
       </ul>
     </div>
+    <div class="nav-link" id="lastItem" (click)="nameRoute()">
+      <img src="../assets/profile-circle-sm.png"/>
+      Alex Markules
+    </div>
   </nav>
-
+  
   <router-outlet></router-outlet>
 
 </div>

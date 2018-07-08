@@ -1,89 +1,89 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { CatService } from '../services/cat.service';
+import { JobService } from '../services/job.service';
 import { ToastComponent } from '../shared/toast/toast.component';
-import { Cat } from '../shared/models/cat.model';
+import { Job } from '../shared/models/job.model';
 
 @Component({
-  selector: 'app-cats',
-  templateUrl: './cats.component.html',
-  styleUrls: ['./cats.component.css']
+  selector: 'app-jobs',
+  templateUrl: './jobs.component.html',
+  styleUrls: ['./jobs.component.css']
 })
-export class CatsComponent implements OnInit {
+export class JobsComponent implements OnInit {
 
-  cat = new Cat();
-  cats: Cat[] = [];
+  job = new Job();
+  jobs: Job[] = [];
   isLoading = true;
   isEditing = false;
 
-  addCatForm: FormGroup;
+  addJobForm: FormGroup;
   name = new FormControl('', Validators.required);
   age = new FormControl('', Validators.required);
   weight = new FormControl('', Validators.required);
 
-  constructor(private catService: CatService,
+  constructor(private jobService: JobService,
               private formBuilder: FormBuilder,
               public toast: ToastComponent) { }
 
   ngOnInit() {
-    this.getCats();
-    this.addCatForm = this.formBuilder.group({
+    this.getJobs();
+    this.addJobForm = this.formBuilder.group({
       name: this.name,
       age: this.age,
       weight: this.weight
     });
   }
 
-  getCats() {
-    this.catService.getCats().subscribe(
-      data => this.cats = data,
+  getJobs() {
+    this.jobService.getJobs().subscribe(
+      data => this.jobs = data,
       error => console.log(error),
       () => this.isLoading = false
     );
   }
 
   addCat() {
-    this.catService.addCat(this.addCatForm.value).subscribe(
+    this.jobService.addJob(this.addJobForm.value).subscribe(
       res => {
-        this.cats.push(res);
-        this.addCatForm.reset();
+        this.jobs.push(res);
+        this.addJobForm.reset();
         this.toast.setMessage('item added successfully.', 'success');
       },
       error => console.log(error)
     );
   }
 
-  enableEditing(cat: Cat) {
+  enableEditing(job: Job) {
     this.isEditing = true;
-    this.cat = cat;
+    this.job = job;
   }
 
   cancelEditing() {
     this.isEditing = false;
-    this.cat = new Cat();
+    this.job = new Job();
     this.toast.setMessage('item editing cancelled.', 'warning');
     // reload the cats to reset the editing
-    this.getCats();
+    this.getJobs();
   }
 
-  editCat(cat: Cat) {
-    this.catService.editCat(cat).subscribe(
+  editCat(job: Job) {
+    this.jobService.editJob(job).subscribe(
       () => {
         this.isEditing = false;
-        this.cat = cat;
+        this.job = job;
         this.toast.setMessage('item edited successfully.', 'success');
       },
       error => console.log(error)
     );
   }
 
-  deleteCat(cat: Cat) {
+  deleteCat(job: Job) {
     if (window.confirm('Are you sure you want to permanently delete this item?')) {
-      this.catService.deleteCat(cat).subscribe(
+      this.jobService.deleteJob(job).subscribe(
         () => {
-          const pos = this.cats.map(elem => elem._id).indexOf(cat._id);
-          this.cats.splice(pos, 1);
+          const pos = this.jobs.map(elem => elem._id).indexOf(job._id);
+          this.jobs.splice(pos, 1);
           this.toast.setMessage('item deleted successfully.', 'success');
         },
         error => console.log(error)
